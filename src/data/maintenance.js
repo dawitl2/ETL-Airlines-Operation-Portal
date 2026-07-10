@@ -1,0 +1,50 @@
+export const workOrders = [
+  {
+    id: 'WO-1042',
+    aircraftId: 'ET-AYN',
+    title: 'Cabin PA intermittent',
+    priority: 'High',
+    status: 'In Progress',
+    assigneeId: 'MNT-002',
+    due: '2026-07-10T21:00:00',
+    stage: 'Inspection',
+  },
+  {
+    id: 'WO-1043',
+    aircraftId: 'ET-AXQ',
+    title: 'A-check release review',
+    priority: 'Critical',
+    status: 'Assigned',
+    assigneeId: 'MNT-001',
+    due: '2026-07-10T19:30:00',
+    stage: 'Assigned',
+  },
+  {
+    id: 'WO-1044',
+    aircraftId: 'ET-BAR',
+    title: 'Delay recovery signoff',
+    priority: 'Medium',
+    status: 'Waiting Parts',
+    assigneeId: 'MNT-001',
+    due: '2026-07-11T07:15:00',
+    stage: 'Parts',
+  },
+  {
+    id: 'WO-1045',
+    aircraftId: 'ET-BAK',
+    title: 'Transit inspection complete',
+    priority: 'Low',
+    status: 'Completed',
+    assigneeId: 'MNT-002',
+    due: '2026-07-10T12:30:00',
+    stage: 'Completed',
+  },
+]
+
+export const checklistItems = [
+  'Aircraft log reviewed',
+  'MEL restrictions checked',
+  'Cabin safety equipment verified',
+  'Flight deck discrepancy reviewed',
+  'Release note submitted to Operations',
+]

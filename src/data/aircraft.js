@@ -1,0 +1,38 @@
+export const aircraft = [
+  {
+    id: 'ET-AXQ',
+    type: 'B787-9',
+    status: 'Available',
+    station: 'ADD',
+    nextFlight: 'ETL-500',
+    restriction: 'None',
+    clearance: 'Released',
+  },
+  {
+    id: 'ET-AYN',
+    type: 'A350-900',
+    status: 'Inspection',
+    station: 'ADD',
+    nextFlight: 'ETL-706',
+    restriction: 'Cabin PA intermittent',
+    clearance: 'Hold',
+  },
+  {
+    id: 'ET-BAR',
+    type: 'B737 MAX',
+    status: 'Turnaround',
+    station: 'ADD',
+    nextFlight: 'ETL-302',
+    restriction: 'Delay recovery signoff',
+    clearance: 'Review',
+  },
+  {
+    id: 'ET-BAK',
+    type: 'B777-300ER',
+    status: 'Available',
+    station: 'ADD',
+    nextFlight: 'ETL-812',
+    restriction: 'None',
+    clearance: 'Released',
+  },
+]
