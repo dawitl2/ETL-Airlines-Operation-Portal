@@ -1,3 +1,5 @@
+'use client'
+
 import { employees } from '../../data/employees'
 
 const crewRows = employees.filter((employee) => employee.role === 'crew')

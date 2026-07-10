@@ -1,36 +1,43 @@
+'use client'
+
 import { createContext, useContext, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { employees, routeByRole } from '../data/employees'
-import { readStorage, removeStorage, writeStorage } from '../utils/storage'
 
 const SessionContext = createContext(null)
 
-export function SessionProvider({ children }) {
-  const navigate = useNavigate()
-  const [session, setSession] = useState(() => readStorage('session', null))
+export function SessionProvider({ children, initialUser = null }) {
+  const [currentUser, setCurrentUser] = useState(initialUser)
 
-  function login(employee) {
-    const nextSession = {
-      employeeId: employee.id,
-      role: employee.role,
-      startedAt: new Date().toISOString(),
+  async function login(credentials) {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    })
+    const payload = await response.json()
+    if (!response.ok) {
+      throw payload.error || { code: 'LOGIN_FAILED', message: 'Unable to sign in.' }
     }
-    setSession(nextSession)
-    writeStorage('session', nextSession)
-    navigate(routeByRole[employee.role], { replace: true })
+    setCurrentUser(payload.user)
+    return payload.user
   }
 
-  function logout() {
-    setSession(null)
-    removeStorage('session')
-    navigate('/login', { replace: true })
+  async function logout(all = false) {
+    await fetch(all ? '/api/auth/logout-all' : '/api/auth/logout', { method: 'POST' })
+    setCurrentUser(null)
+    window.location.assign('/login')
   }
 
-  const currentUser = employees.find((employee) => employee.id === session?.employeeId) || null
+  async function refreshMe() {
+    const response = await fetch('/api/auth/me')
+    if (!response.ok) return null
+    const payload = await response.json()
+    setCurrentUser(payload.user)
+    return payload.user
+  }
 
   const value = useMemo(
-    () => ({ currentUser, login, logout, session }),
-    [currentUser, session],
+    () => ({ currentUser, login, logout, refreshMe, setCurrentUser }),
+    [currentUser],
   )
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>

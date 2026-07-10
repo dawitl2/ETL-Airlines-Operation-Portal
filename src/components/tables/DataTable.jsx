@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo, useState } from 'react'
 
 export function DataTable({ columns, rows, empty = 'No records found', pageSize = 8 }) {

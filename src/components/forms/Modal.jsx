@@ -1,3 +1,5 @@
+'use client'
+
 export function Modal({ children, onClose, title }) {
   return (
     <div className="modal-backdrop" role="presentation">

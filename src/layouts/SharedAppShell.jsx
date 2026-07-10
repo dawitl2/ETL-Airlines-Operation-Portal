@@ -1,11 +1,15 @@
-import { NavLink, Outlet } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Bell, HelpCircle, Moon, RotateCcw, Sun } from 'lucide-react'
 import { appName, roleConfig } from '../app/roleConfig'
 import { useMockData } from '../context/MockDataContext'
-import { useSession } from '../context/SessionContext'
+import { SessionProvider, useSession } from '../context/SessionContext'
 import { useTheme } from '../context/ThemeContext'
 
-export function SharedAppShell({ role }) {
+function ShellContent({ children, role }) {
+  const pathname = usePathname()
   const { currentUser, logout } = useSession()
   const { notifications, resetDemoData } = useMockData()
   const { theme, toggleTheme } = useTheme()
@@ -13,6 +17,7 @@ export function SharedAppShell({ role }) {
   const unread = notifications.filter(
     (item) => item.audience.includes(role) && !item.read,
   ).length
+  const profile = currentUser?.profile
 
   return (
     <div className={`portal-shell ${config.tone}`}>
@@ -26,20 +31,20 @@ export function SharedAppShell({ role }) {
         </div>
 
         <div className="account-card">
-          <div className="avatar">{currentUser?.name?.slice(0, 2).toUpperCase()}</div>
+          <div className="avatar">{profile?.displayName?.slice(0, 2).toUpperCase()}</div>
           <div>
-            <strong>{currentUser?.name}</strong>
-            <span>{currentUser?.position}</span>
-            <small>{currentUser?.base} base</small>
+            <strong>{profile?.displayName}</strong>
+            <span>{profile?.position}</span>
+            <small>{profile?.baseAirport} base</small>
           </div>
         </div>
 
         <nav className="app-nav" aria-label={`${config.label} navigation`}>
           {config.nav.map(([label, path, Icon]) => (
-            <NavLink key={path} to={path}>
+            <Link className={pathname === path ? 'active' : ''} key={path} href={path}>
               <Icon size={17} />
               <span>{label}</span>
-            </NavLink>
+            </Link>
           ))}
         </nav>
       </aside>
@@ -64,15 +69,21 @@ export function SharedAppShell({ role }) {
             <button type="button" title="Reset demo data" onClick={resetDemoData}>
               <RotateCcw size={18} />
             </button>
-            <button className="switch-user" type="button" onClick={logout}>
-              Switch user
+            <button className="switch-user" type="button" onClick={() => logout(false)}>
+              Logout
             </button>
           </div>
         </header>
-        <div className={`role-workspace ${role}`}>
-          <Outlet />
-        </div>
+        <div className={`role-workspace ${role}`}>{children}</div>
       </main>
     </div>
+  )
+}
+
+export function SharedAppShell({ children, currentUser, role }) {
+  return (
+    <SessionProvider initialUser={currentUser}>
+      <ShellContent role={role}>{children}</ShellContent>
+    </SessionProvider>
   )
 }

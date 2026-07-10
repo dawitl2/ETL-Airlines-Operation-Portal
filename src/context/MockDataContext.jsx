@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useMemo, useState } from 'react'
 import { initialDemoState } from '../data/initialDemoState'
 import { readStorage, writeStorage } from '../utils/storage'
